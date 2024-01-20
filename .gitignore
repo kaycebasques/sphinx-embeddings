@@ -1,2 +1,5 @@
 docs/_build
 venv
+build
+dist
+sphinx_embeddings.egg-info
