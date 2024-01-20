@@ -1,14 +1,18 @@
 project = 'sphinx-embeddings'
 copyright = '2024, Kayce Basques'
 author = 'Kayce Basques'
-release = '0.1.0'
+release = '0.2.0'
 
 
 extensions = ['sphinx-embeddings']
 
 
 templates_path = ['_templates']
-exclude_patterns = ['_build', 'venv']
+exclude_patterns = [
+    '_build',
+    'build.sh',
+    'venv', 
+]
 
 
 html_theme = 'alabaster'
