@@ -1,2 +1,2 @@
 sphinx==7.1.2
-sphinx-embeddings==0.0.1
+sphinx-embeddings==0.0.2
