@@ -1,4 +1,3 @@
 =================
 sphinx-embeddings
 =================
-Hello, world!
