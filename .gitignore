@@ -4,3 +4,4 @@ docs/_build
 docs/sphinx-embeddings.log
 sphinx_embeddings.egg-info
 venv
+__pycache__
