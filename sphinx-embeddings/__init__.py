@@ -49,6 +49,12 @@ def on_build_finished(app: Sphinx, exception) -> None:
         json.dump(data, f, indent=4)
 
 
+def init_configs(app: Sphinx) -> None:
+    # https://ai.google.dev/models/gemini#embedding
+    app.add_config_value(f'sphinx_embeddings_model', 'gemini/embedding-001', 'html')
+    app.add_config_value(f'sphinx_embeddings_api_key', None, 'html')
+
+
 def init_globals(srcdir: str, outdir: str) -> None:
     global filename
     global srcpath
@@ -66,6 +72,7 @@ def init_globals(srcdir: str, outdir: str) -> None:
 def setup(app: Sphinx) -> Dict[str, Union[bool, str]]:
     """TODO: Description"""
     init_globals(app.srcdir, app.outdir)
+    init_configs(app)
     # https://www.sphinx-doc.org/en/master/extdev/appapi.html#sphinx-core-events
     app.connect('doctree-resolved', on_doctree_resolved)
     app.connect('build-finished', on_build_finished)

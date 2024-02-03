@@ -1,3 +1,7 @@
+import dotenv
+
+env = dotenv.dotenv_values('.env')
+
 project = 'sphinx-embeddings'
 copyright = '2024, Kayce Basques'
 author = 'Kayce Basques'
@@ -10,3 +14,5 @@ exclude_patterns = [
     'venv', 
 ]
 html_theme = 'alabaster'
+
+sphinx_embeddings_api_key = env['SPHINX_EMBEDDINGS_API_KEY']
