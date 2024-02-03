@@ -1,7 +1,7 @@
 import hashlib
 import json
 import os
-from typing import Dict, Union
+from typing import Dict, Union, List, Callable
 
 from docutils.nodes import section
 from sphinx.application import Sphinx
@@ -22,6 +22,10 @@ def prune_data(docname, before, after):
     # TODO: Delete old docs?
 
 
+def generate_embedding(fn: Callable, text: str):
+    return fn(text)
+
+
 def on_doctree_resolved(app: Sphinx, doctree: document, docname: str) -> None:
     """TODO: Description"""
     before = []
@@ -38,7 +42,10 @@ def on_doctree_resolved(app: Sphinx, doctree: document, docname: str) -> None:
             continue
         data[docname][hash] = {}
         data[docname][hash]['text'] = text[0:50]
-        # TODO: Generate embedding
+        data[docname][hash]['embedding'] = generate_embedding(
+            app.config.sphinx_embeddings_function,
+            text
+        )
     prune_data(docname, before, after)
     
 
@@ -52,7 +59,7 @@ def on_build_finished(app: Sphinx, exception) -> None:
 def init_configs(app: Sphinx) -> None:
     # https://ai.google.dev/models/gemini#embedding
     app.add_config_value(f'sphinx_embeddings_model', 'gemini/embedding-001', 'html')
-    app.add_config_value(f'sphinx_embeddings_api_key', None, 'html')
+    app.add_config_value(f'sphinx_embeddings_function', None, 'html')
 
 
 def init_globals(srcdir: str, outdir: str) -> None:
