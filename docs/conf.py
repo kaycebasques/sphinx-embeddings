@@ -15,4 +15,4 @@ exclude_patterns = [
 ]
 html_theme = 'alabaster'
 
-sphinx_embeddings_api_key = env['SPHINX_EMBEDDINGS_API_KEY']
+sphinx_embeddings_function = lambda text: text[::-1]  # reverse the string
