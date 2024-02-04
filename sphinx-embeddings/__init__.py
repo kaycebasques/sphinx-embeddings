@@ -15,14 +15,19 @@ logger.addHandler(handler)  # debug
 logger.setLevel(logging.DEBUG)  # debug
 
 
-def prune_data(docname, before, after):
+def prune_sections(docname, before, after):
     old_data = [hash for hash in before if hash not in after]
     for hash in old_data:
         del data[docname][hash]
     # TODO: Delete old docs?
 
 
-def generate_embedding(fn: Callable, text: str):
+def embed(fn: Callable, text: str) -> List:
+    response = gemini.embed_content(
+        model='models/embedding-001',
+        content=text,
+        task_type='SEMANTIC_SIMILARITY'
+    )
     return fn(text)
 
 
@@ -42,11 +47,9 @@ def on_doctree_resolved(app: Sphinx, doctree: document, docname: str) -> None:
             continue
         data[docname][hash] = {}
         data[docname][hash]['text'] = text[0:50]
-        data[docname][hash]['embedding'] = generate_embedding(
-            app.config.sphinx_embeddings_function,
-            text
-        )
-    prune_data(docname, before, after)
+        embedding = app.config.sphinx_embeddings_function(text)
+        data[docname][hash]['embedding'] = embedding
+    prune_sections(docname, before, after)
     
 
 def on_build_finished(app: Sphinx, exception) -> None:
