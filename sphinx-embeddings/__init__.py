@@ -88,8 +88,10 @@ def setup(app: Sphinx) -> Dict[str, Union[bool, str]]:
     # https://www.sphinx-doc.org/en/master/extdev/appapi.html#sphinx-core-events
     app.connect('doctree-resolved', on_doctree_resolved)
     app.connect('build-finished', on_build_finished)
+    with open('../version.json', 'r') as f:
+        version = json.load(f)['version']
     return {
-        'version': '0.0.2',
+        'version': version,
         'parallel_read_safe': True,
         'parallel_write_safe': True,
     }
