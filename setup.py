@@ -1,7 +1,7 @@
 import json
 import setuptools
 
-with open('version.json', 'r') as f:
+with open('sphinx-embeddings/version.json', 'r') as f:
     version = json.load(f)['version']
 
 # def install_requires():
@@ -12,6 +12,9 @@ setuptools.setup(
     name='sphinx-embeddings',
     version=version,
     packages=['sphinx-embeddings'],
+    package_data={
+        'sphinx-embeddings': ['version.json']
+    },
     # install_requires=install_requires(),
     install_requires=[],
     classifiers=[],

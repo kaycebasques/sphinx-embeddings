@@ -4,7 +4,7 @@ import typing
 import dotenv
 import google.generativeai as gemini
 
-with open('version.json', 'r') as f:
+with open('../sphinx-embeddings/version.json', 'r') as f:
     version = json.load(f)['version']
 
 env = dotenv.dotenv_values('.env')
