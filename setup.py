@@ -1,7 +1,9 @@
 import json
+import os
 import setuptools
 
-with open('sphinx-embeddings/version.json', 'r') as f:
+cwd = os.path.abspath(os.path.dirname(__file__))
+with open(f'{cwd}/sphinx-embeddings/version.json', 'r') as f:
     version = json.load(f)['version']
 
 # def install_requires():
