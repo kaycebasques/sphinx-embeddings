@@ -6,7 +6,6 @@ from typing import Dict, Union, List, Callable
 
 
 from docutils.nodes import section
-import dotenv
 import google.generativeai as gemini
 from sphinx.application import Sphinx
 from sphinx.addnodes import document
