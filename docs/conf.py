@@ -13,7 +13,8 @@ project = 'sphinx-embeddings'
 copyright = '2024, Kayce Basques'
 author = 'Kayce Basques'
 release = get_version()
-extensions = ['sphinx-embeddings']
+extensions = []
+# extensions = ['sphinx-embeddings']
 templates_path = ['_templates']
 exclude_patterns = [
     '_build',
