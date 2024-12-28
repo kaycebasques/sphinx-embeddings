@@ -3,6 +3,7 @@ VOYAGE_API_KEY
 build
 dist
 docs/_build
+docs/embeddings
 docs/sphinx-embeddings.log
 sphinx_embeddings.egg-info
 venv
