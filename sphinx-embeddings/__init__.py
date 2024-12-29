@@ -15,37 +15,11 @@ def on_doctree_resolved(app, doctree, docname):
 def setup(app):
 
     # User-configurable values
-    # TODO: Make this a single dict called sphinx_embeddings_models and
-    # let each model have slightly different values as needed
-    app.add_config_value(
-        'sphinx_embeddings_model',
-        'text-embedding-004',
-        'html',
-        [str],
-        'The embeddings model to use. Valid values: text-embedding-004'
-    )
-    app.add_config_value(
-        'sphinx_embeddings_api_key',
-        None,
-        'html',
-        [str],
-        'A valid API key for the embedding model.'
-    )
-    default_out_dir = f'{app.confdir}/embeddings'
-    app.add_config_value(
-        'sphinx_embeddings_out_dir',
-        default_out_dir,
-        'html',
-        [str],
-        (
-            'The directory where embeddings will be saved.\n'
-            'The directory will be created if it does not already exist.\n'
-            f'Default value: {default_out_dir}\n'
-        )
-    )
-    out_dir = app.config.sphinx_embeddings_out_dir
-    if not os.path.exists(out_dir):
-        os.makedirs(out_dir)
+    app.add_config_value('sphinx_embeddings_models', None, 'html')
+    default_dir = f'{app.confdir}/embeddings'
+    app.add_config_value('sphinx_embeddings_dir', default_dir, 'html')
+    if not os.path.exists(app.config.sphinx_embeddings_dir):
+        os.makedirs(app.config.sphinx_embeddings_dir)
 
     # Model initialization
     model = app.config.sphinx_embeddings_model

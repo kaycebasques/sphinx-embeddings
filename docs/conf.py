@@ -16,8 +16,12 @@ exclude_patterns = ['_build']
 
 # Extensions
 extensions = ['sphinx-embeddings']
-sphinx_embeddings_model = 'text-embedding-004'
-sphinx_embeddings_api_key = '...'
+sphinx_embeddings_models = {
+    'gemini': {
+        'models': ['text-embedding-004']
+        'api_key': os.environ['GEMINI_API_KEY']
+    }
+}
 
 
 # HTML theme
