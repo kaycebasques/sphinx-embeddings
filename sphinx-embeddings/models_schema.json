@@ -1,0 +1,26 @@
+{
+    "description": "Schema for the sphinx_embeddings_models configuration variable.",
+    "type": "object",
+    "properties": {
+        "gemini": {
+            "description": "Google Gemini configuration.",
+            "type": "object",
+            "properties": {
+                "api_key": {
+                    "description": "Gemini API key.",
+                    "type": "string"
+                },
+                "models": {
+                    "description": "Gemini embedding models to use.",
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "text-embedding-004"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
