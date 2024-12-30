@@ -1,29 +1,48 @@
 import hashlib
+import json
 import os
 
-from .models import Gemini
+from .models import Gemini, Voyage
 
 
 gemini = Gemini()
-data = {}
+voyage = Voyage()
+metadata = {}
 
 
 def cleanup(app, exception):
     embeddings_dir = app.config.sphinx_embeddings_dir
-    for md5 in data:
-        if data[md5]['stale'] == False:
+    for md5 in metadata:
+        if metadata[md5]['stale'] == False:
             continue
         os.remove(f'{embeddings_dir}/{md5}.json')
 
 
-def embed(app, doctree, docname):
+def embed(app, doc_tree, doc_name):
 
-    text = doctree.astext()
+    text = doc_tree.astext()
     md5 = hashlib.md5(text.encode('utf-8')).hexdigest()
-    if md5 in data:
-        data[md5]['stale'] = False
+    if md5 in metadata:
+        metadata[md5]['stale'] = False
         return
-    gemini.embed(text, docname)
+    data = {
+        'doc_name': doc_name,
+        'text': text,
+        'md5': md5
+    }
+    models = app.config.sphinx_embeddings_models
+    if 'gemini' in models:
+        data['gemini'] = {}
+        for name in models['gemini']['models']:
+            model = models['gemini']['models'][name]
+            data['gemini'][name] = {}
+            for task_type in model['task_types']:
+                embedding = gemini.embed(text, name, task_type)
+                data['gemini'][name][task_type] = embedding
+    embeddings_dir = app.config.sphinx_embeddings_dir
+    output_path = f'{embeddings_dir}/{md5}.json'
+    with open(output_path, 'w') as f:
+        json.dump(data, f, indent=4)
 
 
 def setup(app):
@@ -43,7 +62,7 @@ def setup(app):
         if not data_file.endswith('.json'):
             continue
         md5 = data_file.replace('.json', '')
-        data[md5] = {'stale': True}
+        metadata[md5] = {'stale': True}
 
     # Model(s) initialization
     models = app.config.sphinx_embeddings_models
@@ -51,7 +70,10 @@ def setup(app):
         raise ValueError('sphinx_embeddings_models configuration is required')
     if 'gemini' in models:
         api_key = models['gemini']['api_key']
-        gemini.configure(embeddings_dir, api_key)
+        gemini.configure(api_key)
+    if 'voyage' in models:
+        api_key = models['voyage']['api_key']
+        voyage.configure(api_key)
 
     # Event handlers
     app.connect('doctree-resolved', embed)
