@@ -29,6 +29,7 @@ class Gemini(Model):
             response = gemini.embed_content(model=model, content=text, task_type=task_type)
             return response['embedding'] if 'embedding' in response else None
         except Exception as e:
+            print(e)
             return None
 
 

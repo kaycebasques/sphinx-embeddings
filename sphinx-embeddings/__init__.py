@@ -13,13 +13,13 @@ metadata = {}
 def cleanup(app, exception):
     embeddings_dir = app.config.sphinx_embeddings_dir
     for md5 in metadata:
+        # Need to detect per-model and per-task-type
         if metadata[md5]['stale'] == False:
             continue
         os.remove(f'{embeddings_dir}/{md5}.json')
 
 
 def embed(app, doc_tree, doc_name):
-
     text = doc_tree.astext()
     md5 = hashlib.md5(text.encode('utf-8')).hexdigest()
     if md5 in metadata:
@@ -33,12 +33,11 @@ def embed(app, doc_tree, doc_name):
     models = app.config.sphinx_embeddings_models
     if 'gemini' in models:
         data['gemini'] = {}
-        for name in models['gemini']['models']:
-            model = models['gemini']['models'][name]
-            data['gemini'][name] = {}
-            for task_type in model['task_types']:
-                embedding = gemini.embed(text, name, task_type)
-                data['gemini'][name][task_type] = embedding
+        if 'text-embedding-004' in models['gemini']:
+            data['gemini']['text-embedding-004'] = {}
+            for task_type in models['gemini']['text-embedding-004']['task_types']:
+                embedding = gemini.embed(text, 'models/text-embedding-004', task_type)
+                data['gemini']['text-embedding-004'][task_type] = embedding
     embeddings_dir = app.config.sphinx_embeddings_dir
     output_path = f'{embeddings_dir}/{md5}.json'
     with open(output_path, 'w') as f:
@@ -46,7 +45,6 @@ def embed(app, doc_tree, doc_name):
 
 
 def setup(app):
-
     # User-configurable values
     app.add_config_value('sphinx_embeddings_models', None, 'html')
     default_dir = f'{app.confdir}/embeddings'

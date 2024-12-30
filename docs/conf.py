@@ -18,22 +18,25 @@ exclude_patterns = ['_build']
 extensions = ['sphinx-embeddings']
 sphinx_embeddings_models = {
     'gemini': {
-        'models': {
-            'models/text-embedding-004': {
-                'task_types': [
-                    'SEMANTIC_SIMILARITY'
-                ]
-            }
+        'text-embedding-004': {
+            'task_types': [
+                'CLASSIFICATION',
+                'CLUSTERING',
+                # 'FACT_VERIFICATION',  # not supported?
+                # 'QUESTION_ANSWERING',  # not supported?
+                'RETRIEVAL_DOCUMENT',
+                'RETRIEVAL_QUERY',
+                'SEMANTIC_SIMILARITY',
+                # 'TASK_TYPE_UNSPECIFIED'  # supported but not necessary
+            ]
         },
         'api_key': os.environ['GEMINI_API_KEY']
     },
     'voyage': {
-        'models': {
-            'voyage-3': {
-                'task_types': [
-                    'SEMANTIC_SIMILARITY'
-                ]
-            }
+        'voyage-3': {
+            'task_types': [
+                'SEMANTIC_SIMILARITY'
+            ]
         },
         'api_key': '...'
     }
